@@ -229,6 +229,7 @@ class World(object):
 class KeyboardControl(object):
     def __init__(self, world):
         world.hud.notification("Press 'H' or '?' for help.", seconds=4.0)
+        self._world = world
 
     def parse_events(self):
         for event in pygame.event.get():
@@ -237,7 +238,7 @@ class KeyboardControl(object):
             if event.type == pygame.KEYUP:
                 if self._is_quit_shortcut(event.key):
                     return True
-                world.camera_manager.parse_events(event)
+                self._world.camera_manager.parse_events(event)
 
     @staticmethod
     def _is_quit_shortcut(key):
@@ -698,8 +699,18 @@ class CameraManager(object):
             array = array[:, :, :3]
             array = array[:, :, ::-1]
             self.surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
-        if self.recording and self.video_writer:
-            self.video_writer.write(cv2.cvtColor(array, cv2.COLOR_RGB2BGR))
+        if self.recording and self.video_writer is not None:
+            # Create a temporary surface to render HUD on
+            hud_surface = pygame.Surface(self.hud.dim, pygame.SRCALPHA)
+            self.hud.render(hud_surface)
+
+            # Convert HUD surface to numpy array
+            hud_array = pygame.surfarray.array3d(hud_surface)
+            hud_array = hud_array.swapaxes(0, 1) # Transpose to match image array dimensions
+
+            # Overlay HUD on the camera image
+            array = cv2.addWeighted(array, 1.0, hud_array, 0.7, 0)
+            self.video_writer.write(cv2.cvtColor(array, cv2.COLOR_RGB2BGR)) # Convert to BGR for OpenCV
             image.save_to_disk('_out/%08d' % image.frame)
 
 # ==============================================================================
