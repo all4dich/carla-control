@@ -24,6 +24,7 @@ try:
     from pygame.locals import KMOD_CTRL
     from pygame.locals import K_ESCAPE
     from pygame.locals import K_q
+    from pygame.locals import K_r
 except ImportError:
     raise RuntimeError('cannot import pygame, make sure pygame package is installed')
 
@@ -43,6 +44,7 @@ except IndexError:
 
 import carla
 from carla import ColorConverter as cc
+import cv2
 
 from agents.navigation.behavior_agent import BehaviorAgent  # pylint: disable=import-error
 from agents.navigation.basic_agent import BasicAgent  # pylint: disable=import-error
@@ -235,6 +237,7 @@ class KeyboardControl(object):
             if event.type == pygame.KEYUP:
                 if self._is_quit_shortcut(event.key):
                     return True
+                world.camera_manager.parse_events(event)
 
     @staticmethod
     def _is_quit_shortcut(key):
@@ -579,6 +582,7 @@ class CameraManager(object):
         self.surface = None
         self._parent = parent_actor
         self.hud = hud
+        self.video_writer = None
         self.recording = False
         bound_x = 0.5 + self._parent.bounding_box.extent.x
         bound_y = 0.5 + self._parent.bounding_box.extent.y
@@ -612,6 +616,13 @@ class CameraManager(object):
                 blp.set_attribute('range', '50')
             item.append(blp)
         self.index = None
+
+    def parse_events(self, event):
+        """Parse keyboard events"""
+        if event.key == K_r:
+            self.toggle_recording()
+
+
 
     def toggle_camera(self):
         """Activate a camera"""
@@ -647,7 +658,14 @@ class CameraManager(object):
 
     def toggle_recording(self):
         """Toggle recording on or off"""
-        self.recording = not self.recording
+        if not self.recording:
+            # Start recording
+            self.recording = True
+            self.video_writer = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, self.hud.dim)
+        else:
+            # Stop recording
+            self.recording = False
+            self.video_writer.release()
         self.hud.notification('Recording %s' % ('On' if self.recording else 'Off'))
 
     def render(self, display):
@@ -680,7 +698,8 @@ class CameraManager(object):
             array = array[:, :, :3]
             array = array[:, :, ::-1]
             self.surface = pygame.surfarray.make_surface(array.swapaxes(0, 1))
-        if self.recording:
+        if self.recording and self.video_writer:
+            self.video_writer.write(cv2.cvtColor(array, cv2.COLOR_RGB2BGR))
             image.save_to_disk('_out/%08d' % image.frame)
 
 # ==============================================================================
