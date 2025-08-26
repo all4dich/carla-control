@@ -711,7 +711,7 @@ class CameraManager(object):
             # Overlay HUD on the camera image
             array = cv2.addWeighted(array, 1.0, hud_array, 0.7, 0)
             self.video_writer.write(cv2.cvtColor(array, cv2.COLOR_RGB2BGR)) # Convert to BGR for OpenCV
-            image.save_to_disk('_out/%08d' % image.frame)
+            #image.save_to_disk('_out/%08d' % image.frame)
 
 # ==============================================================================
 # -- Game Loop ---------------------------------------------------------
