@@ -38,6 +38,20 @@ python automatic_control.py [options]
 
 Click 'r' key to start the screen recording after launching automatic_control.py.
 
+**Python package for the CARLA Python API:**
+
+You have to download https://github.com/carla-simulator/carla/tree/ue5-dev/PythonAPI/carla in the local. After downloading, change this line with your local path.
+
+```python
+# ==============================================================================
+# -- Add PythonAPI for release mode --------------------------------------------
+# ==============================================================================
+try:
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/carla')
+except IndexError:
+    pass
+```
+
 
 ### `manual_control.py`
 
