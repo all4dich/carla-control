@@ -52,6 +52,9 @@ except IndexError:
     pass
 ```
 
+**Carla 0.9.15  and 0.10.0:**
+
+This script is compatible with both Carla 0.9.15 and 0.10.0. However, it is strongly recommended to create separate Python virtual environments for each Carla version to avoid dependency conflicts. Before running the scripts, ensure you have activated the appropriate virtual environment that matches the Carla version you intend to use. This will help maintain a stable and predictable development setup.
 
 ### `manual_control.py`
 
