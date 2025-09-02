@@ -34,6 +34,11 @@ python automatic_control.py [options]
 | `-b`, `--behavior <BEHAVIOR>` | Choose one of the possible agent behaviors (choices: "cautious", "normal", "aggressive", default: "normal"). |
 | `-s`, `--seed <SEED>`| Set seed for repeating executions (default: None). |
 
+**Recording On/Off:**
+
+Click 'r' key to start the screen recording after launching automatic_control.py.
+
+
 ### `manual_control.py`
 
 This script allows you to manually control a vehicle in the CARLA simulator using a keyboard.
