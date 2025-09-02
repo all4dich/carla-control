@@ -40,7 +40,8 @@ except ImportError:
 # -- Add PythonAPI for release mode --------------------------------------------
 # ==============================================================================
 try:
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/carla')
+    #sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/carla')
+    sys.path.append('/home/ubuntu/workspace/carla-0.10.0/Carla-0.10.0-Linux-Shipping/PythonAPI/carla')
 except IndexError:
     pass
 
