@@ -1,0 +1,5 @@
+numpy
+pygame
+open3d; python_version <= '3.11'
+Pillow
+invertedai@git+https://github.com/inverted-ai/invertedai.git@develop

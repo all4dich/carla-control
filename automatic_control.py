@@ -19,6 +19,8 @@ import re
 import sys
 import weakref
 
+# Set default log level as INFO
+logging.basicConfig(level=logging.INFO)
 try:
     import pygame
     from pygame.locals import KMOD_CTRL
@@ -577,7 +579,7 @@ class GnssSensor(object):
 class CameraManager(object):
     """ Class for camera management"""
 
-    def __init__(self, parent_actor, hud):
+    def __init__(self, parent_actor, hud, recording_path_root=None):
         """Constructor method"""
         self.sensor = None
         self.surface = None
@@ -617,6 +619,10 @@ class CameraManager(object):
                 blp.set_attribute('range', '50')
             item.append(blp)
         self.index = None
+        if recording_path_root is not None:
+            self.recording_path_root = recording_path_root
+        else:
+            self.recording_path_root = '/tmp/'
 
     def parse_events(self, event):
         """Parse keyboard events"""
@@ -661,10 +667,12 @@ class CameraManager(object):
         """Toggle recording on or off"""
         if not self.recording:
             # Start recording
+            logging.info('Recording video to %s', self.recording_path_root)
             self.recording = True
-            self.video_writer = cv2.VideoWriter('output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, self.hud.dim)
+            self.video_writer = cv2.VideoWriter(self.recording_path_root + '/output.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 30, self.hud.dim)
         else:
             # Stop recording
+            logging.info('Stopped recording video to %s', self.recording_path_root)
             self.recording = False
             self.video_writer.release()
         self.hud.notification('Recording %s' % ('On' if self.recording else 'Off'))
