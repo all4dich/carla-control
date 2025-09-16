@@ -42,7 +42,7 @@ except ImportError:
 try:
     #sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/carla')
     #sys.path.append('/home/ubuntu/workspace/carla-0.10.0/Carla-0.10.0-Linux-Shipping/PythonAPI/carla')
-    CARLA_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + 'carla'
+    CARLA_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + 'modules/carla'
     sys.path.append(CARLA_PATH)
 except IndexError:
     pass
