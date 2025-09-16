@@ -41,13 +41,14 @@ except ImportError:
 # ==============================================================================
 try:
     #sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/carla')
-    sys.path.append('/home/ubuntu/workspace/carla-0.10.0/Carla-0.10.0-Linux-Shipping/PythonAPI/carla')
+    #sys.path.append('/home/ubuntu/workspace/carla-0.10.0/Carla-0.10.0-Linux-Shipping/PythonAPI/carla')
+    CARLA_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + 'carla'
+    sys.path.append(CARLA_PATH)
 except IndexError:
     pass
 
 import carla
 from carla import ColorConverter as cc
-import cv2
 
 from agents.navigation.behavior_agent import BehaviorAgent  # pylint: disable=import-error
 from agents.navigation.basic_agent import BasicAgent  # pylint: disable=import-error
